@@ -41,7 +41,7 @@ class User(object):
         self._connect_s3()
         obj = self.s3.Object(
             os.getenv('CIS_S3_BUCKET_NAME', 'cis-ldap2s3-publisher-data'),
-            os.getenv('CIS_LDAP_JSON_FILE', 'ldap-full-profile-v2.json.xz')
+            os.getenv('CIS_LDAP_JSON_FILE', 'ldap-full-profile.json.xz')
         )
 
         tarred_json = bytes(obj.get()["Body"].read())
@@ -81,7 +81,7 @@ class User(object):
                 last_name = self._record_to_last_name(self.ldap_json[person])
 
                 if email.split('@')[1] in self.email_suffix_whitelist:
-                    logger.info('Adding user: {} to the list of potential accounts.'.format(person))
+                    logger.debug('Adding user: {} to the list of potential accounts.'.format(person))
                     users.append(
                         {
                             'first_name': first_name,
@@ -94,15 +94,16 @@ class User(object):
         return users
 
     def _record_to_primary_email(self, user):
-        return user.get('primary_email')['value'].lower()
+        return user.get('primaryEmail').lower()
 
     def _record_to_first_name(self, user):
-        return user.get('first_name')['value']
+        return user.get('firstName')
 
     def _record_to_last_name(self, user):
-        return user.get('last_name')['value']
+        return user.get('lastName')
 
 
+# TODO: Delete this? It doesn't seem to be used anywhere.
 class Group(object):
     def __init__(self, users):
         self.users = users
@@ -118,7 +119,10 @@ class Group(object):
 
     def _generate_grouplist(self):
         for user in self.users:
+            # This is for the full profile syntax
             user_groups = self.users[user]['access_information']['ldap']['values']
+            # TODO replace with something like except get only ldap groups maybe?
+            # user_groups = self.users[user]['groups']
             for group in user_groups:
                 proposed_group = {'group': group, 'members': []}
                 if proposed_group not in self.groups:
@@ -130,6 +134,9 @@ class Group(object):
 
             # Go find all the members
             for user in self.users:
+                # This is for the full profile syntax
+                # TODO replace with something like except get only ldap groups maybe?
+                # if group_name in self.users[user]['groups']:
                 if group_name in self.users[user]['access_information']['ldap']['values']:
                     idx = self.groups.index(group)
                     self.groups[idx]['members'].append(self._record_to_primary_email(self.users[user]))

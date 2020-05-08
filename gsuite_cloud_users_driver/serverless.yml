@@ -10,7 +10,7 @@ provider:
   environment:
     CIS_ENVIRONMENT: production
     CIS_S3_BUCKET_NAME: cis-ldap2s3-publisher-data
-    CIS_LDAP_JSON_FILE: ldap-full-profile-v2.json.xz
+    CIS_LDAP_JSON_FILE: ldap-full-profile.json.xz
     LDAP_ASSUME_ROLE_ARN: arn:aws:iam::371522382791:role/cis-gsuite-users-driver
   iamRoleStatements:
     - Effect: Allow
