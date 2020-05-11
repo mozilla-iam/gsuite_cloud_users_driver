@@ -39,7 +39,7 @@ functions:
     handler: driver.handle
     layers:
       - { Ref: PythonRequirementsLambdaLayer }
-    description: Periodically reading users from LDAP and creates them in infra GCP
+    description: Periodically reads users from LDAP and creates them in infra GCP
     memorySize: 1024
     timeout: 900
     events:
