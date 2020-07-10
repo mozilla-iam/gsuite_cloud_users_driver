@@ -4,9 +4,12 @@ plugins:
 custom:
   pythonRequirements:
     dockerizePip: true
+    layer: true
 provider:
   name: aws
-  runtime: python3.6
+  stage: prod
+  region: us-west-2
+  runtime: python3.8
   environment:
     CIS_ENVIRONMENT: production
     CIS_S3_BUCKET_NAME: cis-ldap2s3-publisher-data
@@ -34,7 +37,9 @@ provider:
 functions:
   driver:
     handler: driver.handle
-    description: Lambda function periodically reading users from ldap-json and creating them in GCP
+    layers:
+      - { Ref: PythonRequirementsLambdaLayer }
+    description: Periodically reads users from LDAP and creates them in infra GCP
     memorySize: 1024
     timeout: 900
     events:

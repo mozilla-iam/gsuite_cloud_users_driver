@@ -1,14 +1,23 @@
 # GSuite Cloud Users Driver
 
 The purpose of this driver is to ensure that all users with a getpocket.com, mozillafoundation.com, and mozilla.com
-email have the ability to single-sign-on into GCP and manage the life cycle of those accounts.  
+email have the ability to single-sign-on into GCP and manage the lifecycle of those accounts.
 
-# Roadmap
+# Deployment
 
-1. Q1 2019 switch over to user person-api v2
-2. Automate Google Groups provisioning based on other data.
-3. Add more test coverage.
+```bash
+$ $(maws)   # become MAWS-Admin in mozilla-iam
+$ cd gsuite_cloud_users_driver
+$ npm install
+$ node_modules/.bin/serverless deploy
+```
 
-# Contributors
+Verify that the driver has been updated properly in Lambda. Note that
+you can monitor the logs from this Lambda with:
 
-* Andrew Krug
+```bash
+$ awslogs get --start 10m --watch /aws/lambda/gcp-cloud-users-prod-driver
+```
+
+# See Also
+* [Mana documentation](https://mana.mozilla.org/wiki/pages/viewpage.action?spaceKey=SECURITY&title=Google+Cloud+Platform+GCP+gcp.infra.mozilla.com)
