@@ -1,5 +1,6 @@
 import logging
 import sys
+from googleapiclient.http import HttpError
 from cloud import Directory
 from ldap import User
 
@@ -21,7 +22,8 @@ user_whitelist = [
     'iam-robot@gcp.infra.mozilla.com',
     'super-admin@gcp.infra.mozilla.com',
     'gene-owner@gcp.infra.mozilla.com',
-    'bpitts-owner@gcp.infra.mozilla.com'
+    'bpitts-owner@gcp.infra.mozilla.com',
+    'elim-owner@gcp.infra.mozilla.com',
 ]
 
 
@@ -58,16 +60,33 @@ def handle(event=None, context=None):
     )
 
     for user in additions:
-        directory.create(user)
-        logger.info('Account created for: {}'.format(user.get('primary_email')))
+        logger.info("Creating account for: {}".format(user.get('primary_email')))
+        try:
+            directory.create(user)
+        except HttpError as error:
+            if 'Entity already exists' in str(error):
+                # We want to know about it, but still want to continue
+                # for users that previously existed, were suspended, and now show up in ldap
+                logger.error("User already exists in gcp: {}".format(user))
+            else:
+                raise error
 
     for email in disables:
-        directory.disable(email)
-        logger.info('Account disabled for: {}'.format(email))
+        logger.info("Disabling account for: {}".format(email))
+        try:
+            directory.disable(email)
+        except HttpError as error:
+            if 'Not Authorized to access this resource/api' in str(error):
+                # We want to know about it, but still want to continue
+                # for users that we can't disable (admins)
+                logger.error("Unable to disable user: {}".format(email))
+            else:
+                raise error
 
     logger.info('Infra GCP cloud users driver run complete.')
 
     return 200
+
 
 if __name__ == '__main__':
     handle()
