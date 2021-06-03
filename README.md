@@ -7,9 +7,9 @@ email have the ability to single-sign-on into GCP and manage the lifecycle of th
 
 ```bash
 $ $(maws)   # become MAWS-Admin in mozilla-iam
-$ cd gsuite_cloud_users_driver
 $ npm install
-$ node_modules/.bin/serverless deploy
+$ cd gsuite_cloud_users_driver
+$ ../node_modules/.bin/serverless deploy
 ```
 
 Verify that the driver has been updated properly in Lambda. Note that
