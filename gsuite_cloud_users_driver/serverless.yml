@@ -3,13 +3,17 @@ plugins:
   - serverless-python-requirements
 custom:
   pythonRequirements:
-    dockerizePip: true
+    dockerizePip: false
+    invalidateCaches: true
+    useStaticCache: false
+    strip: false
     layer: true
+    slim: false
 provider:
   name: aws
   stage: prod
   region: us-west-2
-  runtime: python3.8
+  runtime: python3.9
   environment:
     CIS_ENVIRONMENT: production
     CIS_S3_BUCKET_NAME: cis-ldap2s3-publisher-data
@@ -38,7 +42,7 @@ functions:
   driver:
     handler: driver.handle
     layers:
-      - { Ref: PythonRequirementsLambdaLayer }
+      - Ref: PythonRequirementsLambdaLayer
     description: Periodically reads users from LDAP and creates them in infra GCP
     memorySize: 1024
     timeout: 900

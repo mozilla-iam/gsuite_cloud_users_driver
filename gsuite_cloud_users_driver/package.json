@@ -2,9 +2,8 @@
   "name": "gcp-cloud-users",
   "description": "",
   "version": "0.1.0",
-  "dependencies": {},
   "devDependencies": {
-    "serverless": "^1.70.1",
-    "serverless-python-requirements": "^5.1.0"
+    "serverless": "",
+    "serverless-python-requirements": ""
   }
 }
