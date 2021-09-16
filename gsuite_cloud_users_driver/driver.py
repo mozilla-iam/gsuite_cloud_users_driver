@@ -20,9 +20,7 @@ def setup_logging():
 user_whitelist = [
     'iam-robot@gcp.infra.mozilla.com',
     'super-admin@gcp.infra.mozilla.com',
-    'elim-owner@gcp.infra.mozilla.com',
-    'gene-owner@gcp.infra.mozilla.com',
-    'bpitts-owner@gcp.infra.mozilla.com'
+    'gene-owner@gcp.infra.mozilla.com'
 ]
 
 
