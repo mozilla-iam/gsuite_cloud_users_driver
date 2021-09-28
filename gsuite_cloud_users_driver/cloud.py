@@ -77,14 +77,12 @@ class Directory(object):
     def create(self, user_dict):
         email_prefix = user_dict["primary_email"].split("@")[0]
         body = {
-            'name': {
-                'givenName': email_prefix[0],
-                'fullName': email_prefix,
-                'familyName': email_prefix[1:]
+            "name": {
+                "givenName": email_prefix[0],
+                "fullName": email_prefix,
+                "familyName": email_prefix[1:],
             },
-            "primaryEmail": "{}@gcp.infra.mozilla.com".format(
-                email_prefix
-            ),
+            "primaryEmail": "{}@gcp.infra.mozilla.com".format(email_prefix),
             "password": uuid.uuid4().hex,
             "agreedToTerms": True,
         }
