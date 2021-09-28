@@ -75,9 +75,15 @@ class Directory(object):
         return result
 
     def create(self, user_dict):
+        email_prefix = user_dict["primary_email"].split("@")[0]
         body = {
+            'name': {
+                'givenName': email_prefix[0],
+                'fullName': email_prefix,
+                'familyName': email_prefix[1:]
+            },
             "primaryEmail": "{}@gcp.infra.mozilla.com".format(
-                user_dict["primary_email"].split("@")[0]
+                email_prefix
             ),
             "password": uuid.uuid4().hex,
             "agreedToTerms": True,
@@ -88,6 +94,8 @@ class Directory(object):
             if e.reason == "Entity already exists.":
                 email = body.pop("primaryEmail")
                 result = self.update_user(email, body)
+            else:
+                print(e)
 
         return result
 
