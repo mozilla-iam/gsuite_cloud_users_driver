@@ -16,15 +16,15 @@ provider:
   runtime: python3.9
   environment:
     CIS_ENVIRONMENT: production
-    CIS_S3_BUCKET_NAME: cis-ldap2s3-publisher-data
-    CIS_LDAP_JSON_FILE: ldap-full-profile.json.xz
-    LDAP_ASSUME_ROLE_ARN: arn:aws:iam::371522382791:role/cis-gsuite-users-driver
+    CIS_S3_BUCKET_NAME: cache.ldap.sso.mozilla.com
+    CIS_LDAP_JSON_FILE: ldap_users.json.xz
+    LDAP_ASSUME_ROLE_ARN: arn:aws:iam::320464205386:role/cis-gsuite-users-driver
   iamRoleStatements:
     - Effect: Allow
       Action:
         - "sts:AssumeRole"
       Resource:
-        - arn:aws:iam::371522382791:role/cis-gsuite-users-driver
+        - arn:aws:iam::320464205386:role/cis-gsuite-users-driver
     - Effect: Allow
       Action:
         - "ssm:GetParameterHistory"
