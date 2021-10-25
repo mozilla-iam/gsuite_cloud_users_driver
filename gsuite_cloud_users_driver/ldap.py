@@ -45,8 +45,8 @@ class User(object):
     def _get_ldap_json(self):
         self._connect_s3()
         obj = self.s3.Object(
-            os.getenv("CIS_S3_BUCKET_NAME", "cis-ldap2s3-publisher-data"),
-            os.getenv("CIS_LDAP_JSON_FILE", "ldap-full-profile.json.xz"),
+            os.getenv("CIS_S3_BUCKET_NAME", "cache.ldap.sso.mozilla.com"),
+            os.getenv("CIS_LDAP_JSON_FILE", "ldap_users.json.xz"),
         )
 
         tarred_json = bytes(obj.get()["Body"].read())
